@@ -1,0 +1,5 @@
+{"prompt": "Task: Fill in the blank (French)\nSentence: Je __ un chat.\nPossible words: [ai, suis, vas]\nQuestion: Which word correctly fills in the blank?\nAnswer with explanation in French.", "completion": "ai\nExplanation: In French, 'J'ai un chat' is correct."}
+{"prompt": "Task: Q&A (French)\nQuestion: Comment dit-on 'apple' en français?\nAnswer in a single word.", "completion": "pomme"}
+{"prompt": "Task: Conversation (French)\nUser says: 'Bonjour, comment ça va?'\nSystem: Provide a friendly, natural-sounding response in French.", "completion": "Ça va très bien, merci! Et toi?"}
+{"prompt": "Task: Vocabulary Matching (French)\nPairs:\n1) cat\n2) dog\n3) house\n4) city\nFrench Words: [maison, chien, chat, ville]\nMatch each English word with the correct French word.", "completion": "1) cat - chat\n2) dog - chien\n3) house - maison\n4) city - ville"}
+{"prompt": "Task: Fill in the blank (French)\nSentence: Nous ____ au supermarché.\nPossible words: [allons, avez, suis]\nQuestion: Which word correctly fills in the blank?\nAnswer with a brief explanation in English.", "completion": "allons\nExplanation: 'Nous allons' means 'We are going.'"}
