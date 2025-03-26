@@ -34,7 +34,9 @@ with gr.Blocks(css=CSS) as demo:
                  height="175px",
                  show_label=False,
                  show_fullscreen_button=False,
-                 show_download_button=False, scale=0)
+                 show_download_button=False,
+                 show_share_button=False,
+                 scale=0)
         with gr.Column():
             input_session = gr.Textbox(label="What do you want to learn about today?",
                                        placeholder="Type here or leave blank to chose a random topic")
@@ -47,7 +49,7 @@ with gr.Blocks(css=CSS) as demo:
                                 type="messages",
                                 chatbot=bot,
                                 additional_inputs=[input_session, input_type],
-                                autofocus=True,
+                                autofocus=True
                                 )
         input_session.submit(fn=reset, inputs=[input_session, input_type],
                              outputs=[start_btn, bot, chat.chatbot_state, row])
