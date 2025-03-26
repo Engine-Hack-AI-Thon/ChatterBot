@@ -1,10 +1,10 @@
 ---
-title: {{title}}
-emoji: {{emoji}}
-colorFrom: {{colorFrom}}
-colorTo: {{colorTo}}
-sdk: {{sdk}}
-sdk_version: "{{sdkVersion}}"
+title: ChatterBot
+emoji: 🤖
+colorFrom: yellow
+colorTo: blue
+sdk: gradio
+sdk_version: "3.10"
 app_file: app.py
 pinned: false
 ---
