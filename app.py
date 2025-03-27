@@ -17,10 +17,10 @@ def predict(message, history, session, type, state, task):
     if state == State.SEND_RESPONSE_TO_USER:
         if type == "Fill in the Blank":
             return {"role": "assistant",
-                    "content": f"{verify_answer("fill_in_the_blank", task, message)}"}, State.STANDBY, None
+                    "content": verify_answer("fill_in_the_blank", task, message)}, State.STANDBY, None
         elif type == "Q&A":
             return {"role": "assistant",
-                    "content": f"{verify_answer("q_and_a", task, message)}"}, State.STANDBY, None
+                    "content": verify_answer("q_and_a", task, message)}, State.STANDBY, None
         elif type == "Vocabulary Matching":
             return {"role": "assistant",
                     "content": verify_answer("vocabulary_matching", task, message)}, State.STANDBY, None
