@@ -9,7 +9,6 @@ import os
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-
 # Replace with your actual fine-tuned chat model name.
 FINE_TUNED_MODEL = "ft:gpt-4o-mini-2024-07-18:personal::BFT1H34c"
 
@@ -20,10 +19,10 @@ def generate_chat_response(messages, max_tokens=150, temperature=0.7):
     Returns the assistant's message content.
     """
     response = client.chat.completions.create(model=FINE_TUNED_MODEL,
-    messages=messages,
-    max_tokens=max_tokens,
-    temperature=temperature,
-    top_p=1.0)
+                                              messages=messages,
+                                              max_tokens=max_tokens,
+                                              temperature=temperature,
+                                              top_p=1.0)
     return response.choices[0].message.content.strip()
 
 
@@ -93,7 +92,7 @@ def verify_answer(task_type, original_task, user_answer):
             f"Task: Vocabulary Matching (French).\n"
             f"Exercise: {original_task}\n"
             f"User's matching: {user_answer}\n"
-            "Verify which pairs are correct and provide detailed feedback on incorrect matches."
+            "First, output the correct matching of french words and english words, making sure to say that this is the correct solution. Then, output the solution that the user gave, by assigning each french word to the next english word in the user's response. Then provide detailed feedback for the pairings the user made that do not match the correct matching."
         )
     else:
         prompt = f"User input: {user_answer}\nProvide feedback."
@@ -106,7 +105,7 @@ def verify_answer(task_type, original_task, user_answer):
     return feedback
 
 
-def initiate_fill_in_blank():
+def initiate_fill_in_blank(topic):
     """
     Generates a fill-in-the-blank exercise in French.
     """
@@ -114,37 +113,39 @@ def initiate_fill_in_blank():
         {"role": "system",
          "content": "You are a creative French language tutor who generates fill-in-the-blank exercises. Do not reveal the correct answer."},
         {"role": "user",
-         "content": "Generate a French fill-in-the-blank exercise with one blank. Do not reveal the answer."}
+         "content": f"Generate a French fill-in-the-blank exercise on the topic of {topic} with one blank. Do not reveal the answer."}
     ]
     task = generate_chat_response(messages)
     return task
 
 
-def initiate_q_and_a():
+def initiate_q_and_a(topic):
     """
     Generates an initial Q&A question in French.
     """
     messages = [
         {"role": "system", "content": "You are a French language tutor who generates engaging Q&A questions."},
-        {"role": "user", "content": "Generate a simple French question that requires a one-word answer."}
+        {"role": "user",
+         "content": f"Ask a simple French question about {topic} to your student. The question should have a one-word answer. Do not reveal the answer."}
     ]
     task = generate_chat_response(messages)
     return task
 
 
-def initiate_conversation():
+def initiate_conversation(topic):
     """
     Generates a conversation starter or scene context in French.
     """
     messages = [
-        {"role": "system", "content": "You are a friendly French tutor."},
-        {"role": "user", "content": "Start a conversation in French by providing a conversation starter or context."}
+        {"role": "system", "content": "You are a friendly French tutor that only speaks French."},
+        {"role": "user",
+         "content": f"Start a conversation in French on the topic of {topic} by providing a conversation starter or context. Always respond in French. In the event that the student responds in another language, remind them to speak in French only."}
     ]
     starter = generate_chat_response(messages)
     return starter
 
 
-def initiate_vocabulary_matching():
+def initiate_vocabulary_matching(topic):
     """
     Generates a vocabulary matching exercise in French.
     """
@@ -152,7 +153,7 @@ def initiate_vocabulary_matching():
         {"role": "system",
          "content": "You are a creative French language tutor who generates vocabulary matching exercises."},
         {"role": "user",
-         "content": "Generate a vocabulary matching exercise in French. Provide a list of French words and a scrambled list of English translations. Do not reveal the correct matches."}
+         "content": f"Generate a vocabulary matching exercise in French on the topic of {topic}. Provide a list of 5 French words and an out-of-order list of English translations. Do not reveal the correct matches."}
     ]
     task = generate_chat_response(messages)
     return task
@@ -178,6 +179,16 @@ def conversation_loop(initial_context=None):
         response = generate_chat_response(conversation_history)
         conversation_history.append({"role": "assistant", "content": response})
         print("Bot:", response)
+
+
+def advance_conversation(message, history):
+    if message.lower() in ["quit", "exit"]:
+        return "Ending conversation", False
+    chat_history = [{"role": "system",
+                     "content": "You are a friendly French tutor. You will remind your student to use French if they try speaking in a different language."}]
+    chat_history.extend(history)
+    chat_history.append({"role": "user", "content": message})
+    return generate_chat_response(chat_history), True
 
 
 def main():
